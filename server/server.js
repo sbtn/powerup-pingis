@@ -28,4 +28,9 @@ app.get('/resetStreak', (req, res) => {
     res.status(200).end();
 });
 
+app.get('/restart', (req, res) => {
+    io.emit('restart');
+    res.status(200).end();
+});
+
 server.listen(port, () => console.log(`Server listening on port ${port}`));

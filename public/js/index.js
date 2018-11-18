@@ -27,6 +27,9 @@ socket.on('resetStreak', function () {
     });
 });
 
+socket.on('restart', function () {
+    window.location.reload();
+});
 
 // Player
 var playerOneEl = document.querySelector('.player_one');
