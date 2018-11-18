@@ -1,0 +1,168 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    font-size: .95rem;
+}
+
+html,
+body {
+    color: #f0f8ff;
+    height: 100%;
+}
+
+#container {
+    display: flex;
+    /*---*/
+    height: 100%;
+    overflow: hidden;
+}
+
+.ruta {
+    flex: 1 1 50%;
+    height: 100%;
+    /*---*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*---*/
+    background-color: rgb(52, 101, 134);
+    border: 15px solid #f0f8ff;
+}
+
+.player_one {
+    border-right-width: 4px;
+}
+
+.player_two {
+    border-left-width: 4px;
+}
+
+h1 {
+    font-size: 6rem;
+    font-weight: bold;
+}
+
+progress {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 0;
+    height: 13px;
+    color: rgba(255, 230, 0, 0.904);
+}
+progress::-moz-progress-bar {
+    background: rgba(255, 230, 0, 0.904);
+}
+progress::-webkit-progress-value {
+    background: rgba(255, 230, 0, 0.904);
+}
+
+
+.animated {
+    animation: colorCycle 750ms ease-in-out 1, shake 750ms ease-in-out 1;
+}
+
+@keyframes colorCycle {
+    0% {
+        background-color: #f0f8ff;
+    }
+    20% {
+        background-color: rgb(52, 101, 134);
+    }
+    25% {
+        background-color: #f0f8ff;
+    }
+    30% {
+        background-color: rgb(52, 101, 134);
+    }
+    35% {
+        background-color: #f0f8ff;
+    }
+    100% {
+        background-color: rgb(52, 101, 134);
+    }
+}
+
+@keyframes shake {
+    2% {
+        transform: translate(9px, -2px) rotate(2.5deg)
+    }
+    6% {
+        transform: translate(-3px, 1px) rotate(-1.5deg)
+    }
+    10% {
+        transform: translate(3px, -4px) rotate(-2.5deg)
+    }
+    14% {
+        transform: translate(0px, 10px) rotate(-1.5deg)
+    }
+    18% {
+        transform: translate(1px, 10px) rotate(3.5deg)
+    }
+    22% {
+        transform: translate(2px, 1px) rotate(3.5deg)
+    }
+    26% {
+        transform: translate(2px, 6px) rotate(2.5deg)
+    }
+    30% {
+        transform: translate(1px, -1px) rotate(1.5deg)
+    }
+    34% {
+        transform: translate(-2px, 1px) rotate(-.5deg)
+    }
+    38% {
+        transform: translate(-2px, 2px) rotate(-2.5deg)
+    }
+    42% {
+        transform: translate(9px, -9px) rotate(2.5deg)
+    }
+    46% {
+        transform: translate(-5px, -6px) rotate(.5deg)
+    }
+    50% {
+        transform: translate(3px, -9px) rotate(-2.5deg)
+    }
+    54% {
+        transform: translate(-8px, -2px) rotate(-2.5deg)
+    }
+    58% {
+        transform: translate(-3px, -4px) rotate(3.5deg)
+    }
+    62% {
+        transform: translate(-7px, 8px) rotate(.5deg)
+    }
+    66% {
+        transform: translate(-2px, -6px) rotate(-.5deg)
+    }
+    70% {
+        transform: translate(0px, 7px) rotate(3.5deg)
+    }
+    74% {
+        transform: translate(5px, -1px) rotate(3.5deg)
+    }
+    78% {
+        transform: translate(-2px, 8px) rotate(.5deg)
+    }
+    82% {
+        transform: translate(-2px, -8px) rotate(3.5deg)
+    }
+    86% {
+        transform: translate(8px, 9px) rotate(2.5deg)
+    }
+    90% {
+        transform: translate(9px, -4px) rotate(2.5deg)
+    }
+    94% {
+        transform: translate(0px, 8px) rotate(1.5deg)
+    }
+    98% {
+        transform: translate(-4px, 5px) rotate(2.5deg)
+    }
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0)
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "powerup-pingis",
+  "version": "0.0.1",
+  "description": "Table tennis scorecounter (with powerbar) experiment with socket.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SBTN",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  }
+}
