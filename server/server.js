@@ -19,11 +19,11 @@ io.on('connection', (socket) => {
 app.get('/score/:player', (req, res) => {
     let player = req.params.player;
     
-    io.emit('newScore', { player });
+    io.emit('score', { player });
     res.status(200).end();
 })
 
-app.get('/resetStreak', (req, res) => {
+app.get('/reset-streak', (req, res) => {
     io.emit('resetStreak');
     res.status(200).end();
 });
