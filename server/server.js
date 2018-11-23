@@ -16,9 +16,11 @@ io.on('connection', (socket) => {
   console.log('New user connected.');
 });
 
-app.get('/score/:player', (req, res) => {
-  const { player } = req.params;
-  io.emit('score', { player });
+app.get('/score/:player/:val', (req, res) => {
+  const { player, val } = req.params;
+  console.log(player, val);
+  
+  io.emit('score', { player, val });
   res.status(200).end();
 });
 
