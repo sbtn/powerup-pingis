@@ -1,8 +1,3 @@
-const screen = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-};
-
 // Player
 const Player = function (element) {
   this.el = element;
@@ -19,6 +14,7 @@ let players = [
 Player.prototype.updateScore = function (val) {
   if (this.score + 1 * val >= 0) {
     this.score += 1 * val;
+    game.updateServeCounter(1 * val);    
   }
   this.el.classList.add('animated');
   this.updateStreak(val);
@@ -60,6 +56,32 @@ const renderStreak = (player) => {
 const renderScore = (player) => {
   player.el.children[0].textContent = player.score;
 };
+
+// GAME
+const Game = function () {
+  this.screen = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+
+  this.playerServing = Math.round(Math.random())+1;
+  this.serveFreq = 2;
+  this.serveCounter = 0;
+
+  this.updateServeCounter = (val) => {    
+    this.serveCounter += val;
+    
+    if (this.serveCounter%this.serveFreq === 0) {
+      this.playerServing = this.switchPlayerServing();
+    }
+  }
+
+  this.switchPlayerServing = () => {
+    return this.playerServing === 1 ? 2 : 1;
+  }
+};
+
+const game = new Game();
 
 // SOCKET.IO
 const socket = io();
@@ -114,8 +136,8 @@ players.forEach((player) => {
 });
 
 function getQuadrant(x, y) {
-  if (x < screen.width / 2) {
-    if (y < screen.height / 2) {
+  if (x < game.screen.width / 2) {
+    if (y < game.screen.height / 2) {
       return [1, 1];
     } else {
       return [1, -1];
