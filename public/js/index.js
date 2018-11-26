@@ -1,12 +1,7 @@
-// Game
-const Game = function () {
-  this.screen = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
+const screen = {
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
-
-const game = new Game();
 
 // Player
 const Player = function (element) {
@@ -22,22 +17,18 @@ let players = [
 ];
 
 Player.prototype.updateScore = function (val) {
-
   if (this.score + 1 * val >= 0) {
-    this.score += 1 * val;    
+    this.score += 1 * val;
   }
   this.el.classList.add('animated');
   this.updateStreak(val);
-
   renderScore(this);
 };
 
-Player.prototype.updateStreak = function(val) {  
+Player.prototype.updateStreak = function (val) {
   if (this.streak + 1 * val >= 0 && this.streak + 1 * val <= 3) {
     this.streak += 1 * val;
-
     const otherPlayer = this.getOtherPlayer();
-
     if (val > 0) {
       otherPlayer.loseStreak();
     } else {
@@ -48,14 +39,14 @@ Player.prototype.updateStreak = function(val) {
   renderStreak(this);
 };
 
-Player.prototype.getOtherPlayer = function () { 
+Player.prototype.getOtherPlayer = function () {
   return this === players[0] ? players[1] : players[0];
 }
 
 // Restore streak to other player if point given wrongly to player.
-Player.prototype.loseStreak = function() {
+Player.prototype.loseStreak = function () {
   this.prevStreak = this.streak;
-  this.streak = 0;  
+  this.streak = 0;
 };
 
 Player.prototype.restoreStreak = function () {
@@ -84,7 +75,7 @@ socket.on('disconnect', () => {
 socket.on('score', (score) => {
   console.log(`new score player ${score.player}`);
 
-  const player = players[score.player-1];  
+  const player = players[score.player - 1];
   player.updateScore(score.val);
 });
 
@@ -109,8 +100,11 @@ socket.on('restart', () => {
 window.addEventListener('touchstart', (e) => {
   // console.log(e.touches[0].screenX, e.touches[0].screenY)
   const point = getQuadrant(e.touches[0].screenX, e.touches[0].screenY);
-  const player = players[point[0]];
-  player.updateScore(point[1]);
+
+  const player = point[0];
+  const val = point[1];
+
+  socket.emit('score', { player, val });
 });
 
 players.forEach((player) => {
@@ -119,18 +113,18 @@ players.forEach((player) => {
   });
 });
 
-const getQuadrant = (x, y) => {
-  if (x < game.screen.width / 2) {
-    if (y < game.screen.height / 2) {
-      return [0, 1];
+function getQuadrant(x, y) {
+  if (x < screen.width / 2) {
+    if (y < screen.height / 2) {
+      return [1, 1];
+    } else {
+      return [1, -1];
     }
-    return [0, -1];
-
-  }
-  if (y < screen.height / 2) {
-    return [1, 1];
   } else {
-    return [1, -1];
+    if (y < screen.height / 2) {
+      return [2, 1];
+    } else {
+      return [2, -1];
+    }
   }
-
-};
+}
