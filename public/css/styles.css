@@ -27,7 +27,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     /*---*/
     background-color: rgb(52, 101, 134);
     border: 15px solid #f0f8ff;
@@ -42,8 +42,20 @@ body {
 }
 
 h1 {
-    font-size: 6rem;
+    font-size: 18rem;
+    line-height: 1em;
     font-weight: bold;
+}
+
+p {
+    font-size: 0rem;
+    min-height: 6rem;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+p.serving {
+    font-size: 4.5rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 progress {

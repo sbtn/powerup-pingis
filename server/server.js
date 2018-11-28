@@ -14,12 +14,15 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected.');
+
+  socket.on('score', ({ player, val }) => {
+    io.emit('score', { player, val });
+  });
 });
 
 app.get('/score/:player/:val', (req, res) => {
   const { player, val } = req.params;
-  console.log(player, val);
-  
+
   io.emit('score', { player, val });
   res.status(200).end();
 });
