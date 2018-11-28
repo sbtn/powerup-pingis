@@ -9,7 +9,10 @@ const Player = function (element) {
 Player.prototype.updateScore = function (val) {
   if (this.score + 1 * val >= 0) {
     this.score += 1 * val;
-    game.updateServeCounter(1 * val);
+
+    if (val > 0) {
+      game.updateServeCounter(1 * val);
+    }
   }
   this.el.classList.add('animated');
   this.updateStreak(val);
@@ -49,7 +52,7 @@ const renderStreak = (player) => {
   player.el.querySelector('progress').setAttribute('value', player.streak);
 };
 
-const renderScore = (player) => {  
+const renderScore = (player) => {
   player.el.querySelector('h1').textContent = player.score;
 };
 
@@ -91,7 +94,7 @@ const Game = function () {
       this.serveFreq = 1;
     }
 
-    if (this.serveCounter % this.serveFreq === 0) {      
+    if (this.serveCounter % this.serveFreq === 0) {
       this.playerServing = this.playerServing.getOtherPlayer();
     }
   }
