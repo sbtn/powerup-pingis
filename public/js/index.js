@@ -1,14 +1,19 @@
 // Player
-const Player = function (element) {
+const Player = function (element, sound) {
   this.el = element;
   this.score = 0;
   this.streak = 0;
   this.prevStreak = 0;
+  this.scoreSound = sound;
 };
 
 Player.prototype.updateScore = function (val) {
   if (this.score + 1 * val >= 0) {
     this.score += 1 * val;
+
+    if (1 * val > 0) {
+      this.scoreSound.play();
+    }
 
     game.updateServeCounter(val);
   }
@@ -77,8 +82,8 @@ const Game = function () {
   };
 
   this.players = [
-    new Player(document.querySelector('.player_one')),
-    new Player(document.querySelector('.player_two')),
+    new Player(document.querySelector('.player_one'), document.getElementById('hadoken')),
+    new Player(document.querySelector('.player_two'), document.getElementById('shoryuken')),
   ];
 
   this.playerServing = this.players[Math.round(Math.random())];
