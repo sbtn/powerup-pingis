@@ -10,14 +10,13 @@ Player.prototype.updateScore = function (val) {
   if (this.score + 1 * val >= 0) {
     this.score += 1 * val;
 
-    if (val > 0) {
-      game.updateServeCounter(1 * val);
-    }
+    game.updateServeCounter(val);
   }
   this.el.classList.add('animated');
   this.updateStreak(val);
   renderScore(this);
   renderServe(game.players);
+  renderGui();
 };
 
 Player.prototype.updateStreak = function (val) {
@@ -66,6 +65,10 @@ const renderServe = (players) => {
   });
 };
 
+const renderGui = () => {
+  document.querySelector('div.toggle-serve').textContent = "•".repeat(game.serveFreq);
+}
+
 // GAME
 const Game = function () {
   this.screen = {
@@ -80,6 +83,7 @@ const Game = function () {
 
   this.playerServing = this.players[Math.round(Math.random())];
   this.serveFreq = 2;
+  this.manualServeFreq = false;
   this.serveCounter = 0;
   this.gamePoint = 10;
 
@@ -88,15 +92,32 @@ const Game = function () {
   }
 
   this.updateServeCounter = (val) => {
-    this.serveCounter += val;
+    this.serveCounter += 1 * val;
 
-    if (this.getScores().length >= 2) {
+    // Check for game point
+    if (this.getScores().length >= 2 || this.manualServeFreq) {
       this.serveFreq = 1;
+    } else {
+      this.serveFreq = 2;
     }
 
-    if (this.serveCounter % this.serveFreq === 0) {
-      this.playerServing = this.playerServing.getOtherPlayer();
+    // This needs some work
+    if (this.serveFreq === 1) {
+      if (this.serveCounter % this.serveFreq === 0) {
+        this.playerServing = this.playerServing.getOtherPlayer();
+      }
+    } else {
+      if (this.serveCounter % this.serveFreq === 0 && 1 * val > 0) {
+        this.playerServing = this.playerServing.getOtherPlayer();
+      }
+      if (1 * val < 0 && this.serveCounter % this.serveFreq !== 0) {
+        this.playerServing = this.playerServing.getOtherPlayer();
+      }
     }
+  }
+
+  this.toggleServeFreq = () => {
+    this.serveFreq = this.serveFreq === 2 ? 1 : 2;
   }
 
   this.getScores = () => {
@@ -108,6 +129,7 @@ const Game = function () {
 
 const game = new Game();
 game.init();
+renderGui();
 
 
 
@@ -124,8 +146,6 @@ socket.on('disconnect', () => {
 });
 
 socket.on('score', (score) => {
-  console.log(`new score player ${score.player}`);
-
   const player = game.players[score.player - 1];
   player.updateScore(score.val);
 });
@@ -140,6 +160,14 @@ socket.on('resetStreak', () => {
 socket.on('restart', () => {
   const game = new Game();
   game.init();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.keyCode === 38 || e.keyCode === 40) {
+    game.toggleServeFreq();
+    game.manualServeFreq = game.manualServeFreq === true ? false : true;
+    renderGui();
+  }
 });
 
 window.addEventListener('touchstart', (e) => {
