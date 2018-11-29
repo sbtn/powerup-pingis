@@ -167,13 +167,46 @@ socket.on('restart', () => {
   game.init();
 });
 
+
+let timeKeyDown = null;
+const repeat = 1000;
+let lastRepeat = 0;
+
 document.addEventListener('keydown', (e) => {
   if (e.keyCode === 38 || e.keyCode === 40) {
     game.toggleServeFreq();
     game.manualServeFreq = game.manualServeFreq === true ? false : true;
     renderGui();
   }
-});
+
+  if (e.keyCode === 37 || e.keyCode === 39) {
+    if (timeKeyDown) {
+      const newTimeKeyDown = new Date().getTime();
+      if (newTimeKeyDown - timeKeyDown > 1000) {
+        if (new Date().getTime() - lastRepeat > repeat) {
+          const player = e.keyCode === 37 ? 1 : 2;
+          const val = -1;
+          socket.emit('score', { player, val });
+          lastRepeat = new Date().getTime();
+        }
+      }
+    } else {
+      timeKeyDown = new Date().getTime();
+    }
+  }
+}, false);
+
+document.addEventListener('keyup', (e) => {
+  if (e.keyCode === 37 || e.keyCode === 39) {
+    const timeKeyUp = new Date().getTime()
+    if (timeKeyUp - timeKeyDown < 1000) {
+      const player = e.keyCode === 37 ? 1 : 2;
+      const val = 1;
+      socket.emit('score', { player, val });
+    }
+    timeKeyDown = null;
+  }
+}, false);
 
 window.addEventListener('touchstart', (e) => {
   // console.log(e.touches[0].screenX, e.touches[0].screenY)
@@ -183,12 +216,12 @@ window.addEventListener('touchstart', (e) => {
   const val = point[1];
 
   socket.emit('score', { player, val });
-});
+}, false);
 
 game.players.forEach((player) => {
   player.el.addEventListener('animationend', (e) => {
     player.el.classList.remove('animated');
-  });
+  }, false);
 });
 
 function getQuadrant(x, y) {
