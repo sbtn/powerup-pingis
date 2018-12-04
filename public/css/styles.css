@@ -47,15 +47,28 @@ h1 {
     font-weight: bold;
 }
 
-p {
-    font-size: 0rem;
+.serve {
     min-height: 6rem;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-p.serving {
-    font-size: 4.5rem;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.serve img {
+    height: 0;
+    fill: #f0f8ff;
+    transform: rotateZ(0deg);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+img:first-child.serving {
+    transform: rotateZ(-40deg);
+    margin-right: -20px;
+
+}
+
+img.serving {
+    height: 6rem;
+    transform: rotateZ(40deg);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-left: -20px;
 }
 
 progress {

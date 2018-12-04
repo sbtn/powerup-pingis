@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
 app.get('/score/:player/:val', (req, res) => {
   const { player, val } = req.params;
 
-  io.emit('score', { player, val });
+  io.emit('score', { player, val: parseInt(val) });
   res.status(200).end();
 });
 

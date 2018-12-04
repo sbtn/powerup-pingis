@@ -8,25 +8,25 @@ const Player = function (element, sound) {
 };
 
 Player.prototype.updateScore = function (val) {
-  if (this.score + 1 * val >= 0) {
+  if (this.score + val >= 0) {
     this.score += 1 * val;
 
-    if (1 * val > 0) {
+    if (val > 0) {
       this.scoreSound.play();
     }
 
     game.updateServeCounter(val);
   }
+
   this.el.classList.add('animated');
   this.updateStreak(val);
   renderScore(this);
   renderServe(game.players);
-  renderGui();
 };
 
 Player.prototype.updateStreak = function (val) {
-  if (this.streak + 1 * val >= 0 && this.streak + 1 * val <= 3) {
-    this.streak += 1 * val;
+  if (this.streak + val >= 0 && this.streak + val <= 3) {
+    this.streak += val;
     const otherPlayer = this.getOtherPlayer();
     if (val > 0) {
       otherPlayer.loseStreak();
@@ -35,7 +35,7 @@ Player.prototype.updateStreak = function (val) {
     }
     renderStreak(otherPlayer);
   }
-  renderStreak(this, this.getOtherPlayer());
+  renderStreak(this);
 };
 
 Player.prototype.getOtherPlayer = function () {
@@ -63,16 +63,12 @@ const renderScore = (player) => {
 const renderServe = (players) => {
   players.forEach((player) => {
     if (game.playerServing === player) {
-      player.el.querySelector('p').classList.add('serving');
+      Array.from(player.el.querySelector('div.serve').children).forEach((child, i) => i < game.serveFreq ? child.classList.add('serving') : child.classList.remove('serving'));
     } else {
-      player.el.querySelector('p').classList.remove('serving');
+      Array.from(player.el.querySelector('div.serve').children).forEach((child) => child.classList.remove('serving'));
     }
   });
 };
-
-const renderGui = () => {
-  document.querySelector('div.toggle-serve').textContent = "•".repeat(game.serveFreq);
-}
 
 // GAME
 const Game = function () {
@@ -97,25 +93,25 @@ const Game = function () {
   }
 
   this.updateServeCounter = (val) => {
-    this.serveCounter += 1 * val;
+    this.serveCounter += val;
 
-    // Check for game point
-    if (this.getScores().length >= 2 || this.manualServeFreq) {
+    // If both players at game point then serve frequency should be set to 1
+    if (this.playersAtGamePoint().length >= 2 || this.manualServeFreq) {
       this.serveFreq = 1;
     } else {
       this.serveFreq = 2;
     }
 
-    // This needs some work
     if (this.serveFreq === 1) {
-      if (this.serveCounter % this.serveFreq === 0) {
-        this.playerServing = this.playerServing.getOtherPlayer();
-      }
+      // With 1-serve game every point is a serve change
+      this.playerServing = this.playerServing.getOtherPlayer();
     } else {
-      if (this.serveCounter % this.serveFreq === 0 && 1 * val > 0) {
+      // Normal positive count up, change att serveFreq
+      if (this.serveCounter % this.serveFreq === 0 && val > 0) {
         this.playerServing = this.playerServing.getOtherPlayer();
       }
-      if (1 * val < 0 && this.serveCounter % this.serveFreq !== 0) {
+      // Undo negative count (val < 0) Should change back to correct server if the erronous point caused a server change
+      if (this.serveCounter % this.serveFreq !== 0 && val < 0) {
         this.playerServing = this.playerServing.getOtherPlayer();
       }
     }
@@ -125,7 +121,7 @@ const Game = function () {
     this.serveFreq = this.serveFreq === 2 ? 1 : 2;
   }
 
-  this.getScores = () => {
+  this.playersAtGamePoint = () => {
     return this.players.filter((player) => {
       return player.score >= this.gamePoint;
     });
@@ -134,7 +130,7 @@ const Game = function () {
 
 const game = new Game();
 game.init();
-renderGui();
+renderServe(game.players);
 
 
 
@@ -172,11 +168,12 @@ let timeKeyDown = null;
 const repeat = 1000;
 let lastRepeat = 0;
 
+// Keypress arrow up or down toggles serving frequency between 1 and 2.
 document.addEventListener('keydown', (e) => {
   if (e.keyCode === 38 || e.keyCode === 40) {
     game.toggleServeFreq();
     game.manualServeFreq = game.manualServeFreq === true ? false : true;
-    renderGui();
+    renderServe(game.players);
   }
 
   if (e.keyCode === 37 || e.keyCode === 39) {
