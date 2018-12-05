@@ -90,6 +90,9 @@ const Game = function () {
 
   this.init = () => {
     renderServe(this.players);
+    this.players.forEach((player) => {
+      player.updateScore(0);
+    });
   }
 
   this.updateServeCounter = (val) => {
@@ -130,8 +133,6 @@ const Game = function () {
 
 const game = new Game();
 game.init();
-renderServe(game.players);
-
 
 
 
