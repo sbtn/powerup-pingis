@@ -1,0 +1,52 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="mocha"></div>
+
+    <!-- page code -->
+    <div id="container">
+        <div class="ruta player_one">
+            <div class="serve">
+                <img src="img/racket.svg" alt="Serve">
+                <img src="img/racket.svg" alt="Serve">
+            </div>
+            <h1>0</h1>
+            <div>
+                <progress value="0" max="3"></progress>
+            </div>
+        </div>
+        <div class="ruta player_two">
+            <div class="serve">
+                <img src="img/racket.svg" alt="Serve">
+                <img src="img/racket.svg" alt="Serve">
+            </div>
+            <h1>0</h1>
+            <div>
+                <progress value="0" max="3"></progress>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="hadoken" src="audio/hadoken.mp3" preload="auto"></audio>
+    <audio id="shoryuken" src="audio/shoryuken.mp3" preload="auto"></audio>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- page code end -->
+    
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+
+  <script>mocha.setup('bdd')</script>
+  <script src="../js/index.js"></script>
+  <script src="game.test.js"></script>
+  <script>
+    mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+</html>

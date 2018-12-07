@@ -131,7 +131,7 @@ const Game = function () {
   };
 };
 
-const game = new Game();
+let game = new Game();
 game.init();
 
 
@@ -160,7 +160,7 @@ socket.on('resetStreak', () => {
 });
 
 socket.on('restart', () => {
-  const game = new Game();
+  game = new Game();
   game.init();
 });
 
