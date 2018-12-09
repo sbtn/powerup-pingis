@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
-    "test": ""
+    "test": "",
+    "build": "babel src/app.js --out-file=public/js/index.js --presets=@babel/env"
   },
   "author": "SBTN",
   "license": "MIT",
