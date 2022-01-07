@@ -1,3 +1,5 @@
+![PowerUp Pingis Screenshot](PUP.gif)
+
 # Power-Up Pingis
 Power-Up Pingis is a visual scoreboard for table tennis matches. It provides an interface to update the score using the technology of your own choice and updates the scoreboard using Socket.io. 
 
